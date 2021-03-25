@@ -1,0 +1,31 @@
+Trevor Roe
+Zhang Rui
+CISC 450 / CPEG 419
+23 March 2021
+
+Project 1 of CISC 450
+
+TCP/IP server-client connection, programmed in C. The goal of this project is to design a program which utilizes
+internet sockets to send a file over the internet.
+
+Files:
+
+server.c
+client.c
+send.txt
+recv.txt
+makefile
+README <- (this file)
+
+uses:
+
+make all
+- compile server / client code
+
+make run
+- concurrently execute server listening & client request for file transfer
+
+make clean
+- remove .o files (used for execution)
+
+
