@@ -82,7 +82,12 @@ int main()
     // function for chat, send file request
     chatfunc(sockfd);
 
-    
+    //struct sockaddr_in serv_addr, new_addr;
+    //socklen_t addr_size = sizeof(new_addr);
+
+    //new_sock = accept(sockfd, (struct sockaddr*)&new_addr, &addr_size);
+
+    write_file(new_sock);
     //printf("[+]Data written in the file successfully.\n");
 
     // close the socket
