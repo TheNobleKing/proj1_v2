@@ -17,6 +17,8 @@ void chatfunc(int sockfd)
         n = 0;
         while ((buff[n++] = getchar()) != '\n');//cin input
 
+	buff[strcspn(buff, "\n")] = 0;
+
         write(sockfd, buff, sizeof(buff)); //send buffered input
         if(buff != NULL){
 	  bzero(buff, sizeof(buff));

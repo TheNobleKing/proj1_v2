@@ -23,8 +23,8 @@ void chatfunc(int sockfd)
         // read the message from client and copy it in buffer
         read(sockfd, buff, sizeof(buff));
 	strcpy(filename, buff);
-        // print buffer which contains the client contents
-        printf("filename: %s\n", filename);
+
+	//copy buffer contents then clear buffer
         bzero(buff, MAX);
 	if(filename != NULL){
 	  control = 0;
@@ -67,7 +67,7 @@ int main()
         exit(0);
     }
     else
-        printf("Server listening..\n");
+        printf("Server listening...\n");
     len = sizeof(cli);
 
     // Accept the data packet from client and verification
@@ -81,7 +81,8 @@ int main()
 
     // Function for chatting between client and server
     chatfunc(connfd);
-
+    printf("File '%s' requested by client.\n", filename);
+    printf("Responding...\n");	
     // After chatting close the socket
     close(sockfd);
 }
