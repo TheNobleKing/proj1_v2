@@ -3,12 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
-#define MAX 80
+#define SIZE 80
 #define PORT 8080
 #define SA struct sockaddr
+
+
 void chatfunc(int sockfd)
 {
-    char buff[MAX];
+    char buff[SIZE];
     int n; int control = 1;
 
     while(control != 0){
@@ -27,11 +29,33 @@ void chatfunc(int sockfd)
       }
 }
 
+void write_file(int sockfd){
+  int n;
+  FILE *fp;
+  char *filename = "out.txt";
+  char buffer[SIZE];
+
+  fp = fopen(filename, "w"); //create out.txt
+  while (1) {
+    n = recv(sockfd, buffer, SIZE, 0); //copy buffer each time it is updated
+    printf("Recieving packet %n \n", n);
+    if (n <= 0){
+      break;
+      return;
+    }
+    fprintf(fp, "%s", buffer); //if we get here something is wrong o.o
+    bzero(buffer, SIZE);
+  }
+  return;
+}
+
+
 int main()
 {
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
-  
+   // struct sockaddr_in servaddr, new_addr;
+    int new_sock;
     // socket create and varification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
@@ -55,9 +79,12 @@ int main()
     else
         printf("connected to the server..\n");
   
-    // function for chat
+    // function for chat, send file request
     chatfunc(sockfd);
-  
+
+    
+    //printf("[+]Data written in the file successfully.\n");
+
     // close the socket
     close(sockfd);
 }

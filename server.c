@@ -5,27 +5,27 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#define MAX 80
+#define SIZE 80
 #define PORT 8080
 #define SA struct sockaddr
 
-char filename[MAX];
+char filename[SIZE];
 
 // Function designed for chat between client and server.
 void chatfunc(int sockfd)
 {
-    char buff[MAX];
+    char buff[SIZE];
     int n, control;
     control = 1;
     while(control != 0) {
-        bzero(buff, MAX);
+        bzero(buff, SIZE);
 
         // read the message from client and copy it in buffer
         read(sockfd, buff, sizeof(buff));
 	strcpy(filename, buff);
 
 	//copy buffer contents then clear buffer
-        bzero(buff, MAX);
+        bzero(buff, SIZE);
 	if(filename != NULL){
 	  control = 0;
 	}
@@ -33,10 +33,25 @@ void chatfunc(int sockfd)
 }
 
 
+void send_file(FILE *fp, int sockfd){
+  int n;
+  char data[SIZE] = {0};
+
+  while(fgets(data, SIZE, fp) != NULL) {
+    if (send(sockfd, data, sizeof(data), 0) == -1) {
+      perror("[-]Error in sending file.");
+      exit(1);
+    }
+    bzero(data, SIZE);
+  }
+}
+
+
 int main()
 {
     int sockfd, connfd, len;
     struct sockaddr_in servaddr, cli;
+    FILE *fp;
 
     // socket create and verification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -59,15 +74,15 @@ int main()
         exit(0);
     }
     else
-        printf("Socket successfully binded..\n");
+        printf("[+]Socket successfully binded..\n");
 
     // Now server is ready to listen and verification
     if ((listen(sockfd, 5)) != 0) {
-        printf("Listen failed...\n");
+        printf("[!]Listen failed...\n");
         exit(0);
     }
     else
-        printf("Server listening...\n");
+        printf("[+]Server listening...\n");
     len = sizeof(cli);
 
     // Accept the data packet from client and verification
@@ -79,10 +94,15 @@ int main()
     else
         printf("[+]Client has connected\n");
 
-    // Function for chatting between client and server
+    // Chat with client to get filename
     chatfunc(connfd);
     printf("File '%s' requested by client.\n", filename);
-    printf("Responding...\n");	
+
+    fp = fopen(filename, "r");//parse file
+    if(fp != NULL){ printf("Responding...\n"); } else { printf("Could not find %s", filename); }//give feedback
+    //send_file(fp, sockfd);//send file
+    printf("[+]File sent.");
+
     // After chatting close the socket
     close(sockfd);
 }
