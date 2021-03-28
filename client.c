@@ -30,32 +30,36 @@ void chatfunc(int sockfd)
 }
 
 void write_file(int sockfd){
-  int n,c;
+  int n,c, bytetotal;
   FILE *fp;
   char *filename = "out.txt";
   char buffer[SIZE];
 
   fp = fopen(filename, "w"); //create out.txt
 printf("out.txt created, attempting to write...\n");
-	c = 0; n = 0;
+	c = 0; n = 0; bytetotal = 0;
   while (1) {
 
     c = recv(sockfd, buffer, SIZE, 0); //copy buffer each time it is updated
     if( c == -1 ){
     perror("recv failed: \t");
-    } else if( c > 0 ) {
-	printf("n = %d \n", n);
     }
 
-    printf("Packet %d recieved with %d data bytes\n", n, c);
-
-    if (c <= 0){
+    printf("Packet %d recieved with %d data bytes\n", ++n, c);
+    bytetotal += c;
+    if (c == 0){
+      printf("End of Transmission packet with sequence number %d recieved with %d data bytes\n", n, c);
+      break;
+      return;
+    } else if( c < 0){
       break;
       return;
     }
-    fprintf(fp, "%s", buffer); //o_o
+
+    fprintf(fp, "%s", buffer); //write to file
     bzero(buffer, SIZE);
   }
+  printf("Total number of data bytes recieved: %d\n", bytetotal);
   return;
 }
 
@@ -101,5 +105,6 @@ printf("\n chatfunc complete \n ");
     printf("[+]Data written in the file successfully.\n");
 
     // close the socket
+    printf("Closing connection.\n")
     close(sockfd);
 }
