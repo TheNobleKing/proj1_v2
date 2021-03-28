@@ -34,20 +34,25 @@ void chatfunc(int sockfd)
 
 
 void send_file(FILE *fp, int sockfd){
-  int n, c, check = 0;
+  int n, c, bytetotal, check = 0;
   char data[SIZE] = {0};
+  n = 0; bytetotal = 0;
 
   while((fgets(data, SIZE, fp)) != NULL) {
-    check = write(sockfd, data, SIZE, 0);
-	if(check > 0){
-	  n++;
-	}
-     c = sizeof(data) / sizeof(data[0]);
-
-     printf("Packet %d transmitted with %d data bytes\n", n, c);
-    }
     bzero(data, SIZE);
-
+    check = NULL; //reset chkval
+    check = write(sockfd, data, SIZE, 0);
+    if(check > 0){
+      n++; //only iterate n when packets are sent
+    } else if (check == 0){
+      printf("eot packet detected\n");
+    }
+     c = sizeof(data) / sizeof(data[0]);
+     printf("Packet %d transmitted with %d data bytes\n", n, c);
+     bytetotal += c;
+     }
+     printf("End of Transmission Packet with sequence number %d transmitted with %d data bytes\n", ++n, 0);
+     printf("Number of data bytes transmitted: %d\n", bytetotal);
 }
 
 
@@ -105,8 +110,9 @@ int main()
     fp = fopen(filename, "r");//parse file
     if(fp != NULL){ printf("Responding...\n"); } else { printf("Could not find %s", filename); }//give feedback
     send_file(fp, connfd);//send file
-    printf("[+]File sent.");
+    printf("[+]File sent.\n");
 
     // After chatting close the socket
+    printf("Closing connection.\n");
     close(sockfd);
 }
