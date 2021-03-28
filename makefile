@@ -3,7 +3,11 @@ all : client.c server.c
 	gcc server.c -o server.o
 clean: 
 	rm *.o
+	rm a.out
+	rm out.txt
 
-run: client.o server.o
-	./server.o &
-	./client.o &
+client: client.o
+	./client.o
+
+server: server.o
+	./server.o

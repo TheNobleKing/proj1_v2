@@ -30,20 +30,26 @@ void chatfunc(int sockfd)
 }
 
 void write_file(int sockfd){
-  int n = 1;
+  int n,c;
   FILE *fp;
   char *filename = "out.txt";
-  char buffer[1024];
+  char buffer[SIZE];
 
   fp = fopen(filename, "w"); //create out.txt
 printf("out.txt created, attempting to write...\n");
-
+	c = 0; n = 0;
   while (1) {
-    n = recv(sockfd, buffer, SIZE, 0); //copy buffer each time it is updated
-	if( n == -1){ perror("recv failed: \t");}
-	printf("n = %d", n);
-	puts(buffer);
-    if (n <= 0){
+
+    c = recv(sockfd, buffer, SIZE, 0); //copy buffer each time it is updated
+    if( c == -1 ){
+    perror("recv failed: \t");
+    } else if( c > 0 ) {
+	printf("n = %d \n", n);
+    }
+
+    printf("Packet %d recieved with %d data bytes\n", n, c);
+
+    if (c <= 0){
       break;
       return;
     }
