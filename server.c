@@ -34,16 +34,17 @@ void chatfunc(int sockfd)
 
 
 void send_file(FILE *fp, int sockfd){
-  int n;
+  int n = 0;
   char data[SIZE] = {0};
 
-  while(fgets(data, SIZE, fp) != NULL) {
-    if (send(sockfd, data, sizeof(data), 0) == -1) {
-      perror("[-]Error in sending file.");
-      exit(1);
+  while((fgets(data, SIZE, fp)) != NULL) {
+	puts(data);
+        write(sockfd, data, SIZE, 0);
+      //perror("[-]Error in sending file.");
+      //exit(1);
     }
     bzero(data, SIZE);
-  }
+
 }
 
 

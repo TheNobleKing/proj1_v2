@@ -30,15 +30,19 @@ void chatfunc(int sockfd)
 }
 
 void write_file(int sockfd){
-  int n;
+  int n = 1;
   FILE *fp;
   char *filename = "out.txt";
-  char buffer[SIZE];
+  char buffer[1024];
 
   fp = fopen(filename, "w"); //create out.txt
+printf("out.txt created, attempting to write...\n");
+
   while (1) {
     n = recv(sockfd, buffer, SIZE, 0); //copy buffer each time it is updated
-    printf("Recieving packet %n \n", n);
+	if( n == -1){ perror("recv failed: \t");}
+	printf("n = %d", n);
+	puts(buffer);
     if (n <= 0){
       break;
       return;
@@ -81,14 +85,14 @@ int main()
   
     // function for chat, send file request
     chatfunc(sockfd);
+printf("\n chatfunc complete \n ");
 
-    //struct sockaddr_in serv_addr, new_addr;
-    //socklen_t addr_size = sizeof(new_addr);
+    //new_sock corresponds with connfd
+    //new_sock = connect(sockfd, (SA*)&servaddr, sizeof(servaddr));
+    //	printf("New socket created.\n");
 
-    new_sock = accept(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
-	printf("new socket created");
-    //write_file(new_sock);
-    //printf("[+]Data written in the file successfully.\n");
+    write_file(sockfd);
+    printf("[+]Data written in the file successfully.\n");
 
     // close the socket
     close(sockfd);
