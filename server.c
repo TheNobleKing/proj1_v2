@@ -1,3 +1,10 @@
+//CPEG 450 - PROJECT 1 - ZHANG RUI - FILE AUTHORS: TREVOR ROE, NOAH HODGHSON
+//Server.c contains two helper functions, chatfunc and send_file and a main func
+//Main function handles creating tcp socket, listening and waiting for client connect and acknowledging it
+//chatfunc - facilitates transferring a single string between server and client, and saves this string as filename being requested by client
+//send_file - facilitates full file transfer
+
+
 #include <stdio.h>
 #include <netdb.h>
 #include <netinet/in.h>
