@@ -100,7 +100,7 @@ int main()
 
     fp = fopen(filename, "r");//parse file
     if(fp != NULL){ printf("Responding...\n"); } else { printf("Could not find %s", filename); }//give feedback
-    send_file(fp, sockfd);//send file
+    send_file(fp, connfd);//send file
     printf("[+]File sent.");
 
     // After chatting close the socket

@@ -43,7 +43,7 @@ void write_file(int sockfd){
       break;
       return;
     }
-    fprintf(fp, "%s", buffer); //if we get here something is wrong o.o
+    fprintf(fp, "%s", buffer); //o_o
     bzero(buffer, SIZE);
   }
   return;
@@ -85,9 +85,9 @@ int main()
     //struct sockaddr_in serv_addr, new_addr;
     //socklen_t addr_size = sizeof(new_addr);
 
-    //new_sock = accept(sockfd, (struct sockaddr*)&new_addr, &addr_size);
-
-    write_file(new_sock);
+    new_sock = accept(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+	printf("new socket created");
+    //write_file(new_sock);
     //printf("[+]Data written in the file successfully.\n");
 
     // close the socket
