@@ -1,3 +1,8 @@
+//PROJECT 1 - CISC 450 - ZHANG RUI - FILE AUTHORS: TREVOR ROE, NOAH HODGHSON
+//client.c contains two helper functions, chatfunc and write_file and a main
+//chatfunc facilitates the transfer of a single string to server. This string is the filename of a file being requested
+//write_file recieves file over TCP socket and continually writes buffer into a file, then saves it as out.txt
+//main function handles TCP socket creation, connection, acknowledgement and closing of socket
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
