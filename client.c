@@ -110,6 +110,6 @@ printf("\n chatfunc complete \n ");
     printf("[+]Data written in the file successfully.\n");
 
     // close the socket
-    printf("Closing connection.\n")
+    printf("Closing connection.\n");
     close(sockfd);
 }
